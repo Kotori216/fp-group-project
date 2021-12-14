@@ -10,4 +10,5 @@ main = do
     let url = "https://data.cityofchicago.org/api/views/7piw-z6r6/rows.xml"
     print "Downloading..."
     xml <- download url
-    print $ parse (L8.toStrict xml)
+    let (Right result) = parse (L8.toStrict xml)
+    print $ Prelude.head $ children $ Prelude.head $ children result
