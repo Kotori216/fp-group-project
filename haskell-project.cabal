@@ -7,11 +7,11 @@ cabal-version: 1.12
 name:           haskell-project
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/haskell-project#readme>
-homepage:       https://github.com/githubuser/haskell-project#readme
-bug-reports:    https://github.com/githubuser/haskell-project/issues
-author:         Author name here
+homepage:       https://github.com/Kotori216/fp-group-project#readme
+bug-reports:    https://github.com/Kotori216/fp-group-project/issues
+author:         Qifei Wang, Yunqing Gou, Yingzhe Wan
 maintainer:     example@example.com
-copyright:      2021 Author name here
+copyright:      2021 Qifei Wang, Yunqing Gou, Yingzhe Wan
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -21,17 +21,24 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/haskell-project
+  location: https://github.com/Kotori216/fp-group-project
 
 library
   exposed-modules:
-      Lib
+      Database
+      Fetch
+      Parse
+      Types
   other-modules:
       Paths_haskell_project
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , bytestring
+    , http-conduit
+    , sqlite-simple
+    , xeno
   default-language: Haskell2010
 
 executable haskell-project-exe
@@ -43,7 +50,11 @@ executable haskell-project-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , bytestring
     , haskell-project
+    , http-conduit
+    , sqlite-simple
+    , xeno
   default-language: Haskell2010
 
 test-suite haskell-project-test
@@ -56,5 +67,9 @@ test-suite haskell-project-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , bytestring
     , haskell-project
+    , http-conduit
+    , sqlite-simple
+    , xeno
   default-language: Haskell2010

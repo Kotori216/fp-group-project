@@ -1,10 +1,10 @@
 name:                haskell-project
 version:             0.1.0.0
-github:              "githubuser/haskell-project"
+github:              "Kotori216/fp-group-project"
 license:             BSD3
-author:              "Author name here"
+author:              "Qifei Wang, Yunqing Gou, Yingzhe Wan"
 maintainer:          "example@example.com"
-copyright:           "2021 Author name here"
+copyright:           "2021 Qifei Wang, Yunqing Gou, Yingzhe Wan"
 
 extra-source-files:
 - README.md
@@ -21,6 +21,10 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- http-conduit
+- sqlite-simple
+- bytestring
+- xeno
 
 library:
   source-dirs: src
