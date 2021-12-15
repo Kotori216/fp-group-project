@@ -1,9 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Parse (
---    parseRows
-    xml2RowNodes,
-    parseMovie
+    parseRows
 ) where
 
 import Types
@@ -24,14 +22,6 @@ getTextOfChildren [] _ = Nothing
 getTextOfChildren (thisChild : nextChildren) childName 
     | bsToStr (Xeno.DOM.name thisChild) == childName = Just (getTextOfANode thisChild)
     | otherwise = getTextOfChildren nextChildren childName
-
-parseMovie :: Node -> Movie
-parseMovie node =
-    let Just mtitle = getTextOfChildren (children node) "title"
-        mcc = (getTextOfChildren (children node) "cc") == Just "Y" 
-        Just mrating = getTextOfChildren (children node) "rating"
-        munderwriter = getTextOfChildren (children node) "underwriter"
-    in Movie {title = mtitle, cc = mcc, rating = mrating, underwriter = munderwriter}
 
 parseRow :: Node -> Row
 parseRow node =
@@ -57,7 +47,11 @@ parseRow node =
         phone_ = rphone,
         address_ = raddress
     }
- 
+
+parseRows :: L8.ByteString -> Rows
+parseRows xml = 
+    let rowList = Prelude.map parseRow $ xml2RowNodes xml
+    in Rows {rows = rowList}
 
 xml2RowNodes :: L8.ByteString -> [Node]
 xml2RowNodes xml = case parse (L8.toStrict xml) of

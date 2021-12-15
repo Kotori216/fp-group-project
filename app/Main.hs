@@ -11,22 +11,7 @@ main = do
     let url = "https://data.cityofchicago.org/api/views/7piw-z6r6/rows.xml"
     print "Downloading..."
     xml <- download url
-    print "=========Node"
-    let node = Prelude.head $ xml2RowNodes xml
-    print node
-    print "=========name"
-    print $ name node
-    print "=========attributes"
-    print $ attributes node
-    print "=========contents"
-    print $ contents node
-    print "=========children"
-    print $ children node
-    print "=========first child contents text"
-    let Text t = Prelude.head $ contents $ Prelude.head $ children node
-    print t
-    print "=========first movie"
-    print $ parseMovie node
-    print "=========id"
-    print $ snd $ Prelude.head $ attributes $ node
+    print "Parsing..."
+    let rows_ = parseRows xml
+    print rows_
 
