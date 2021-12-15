@@ -1,6 +1,17 @@
 module Database (
     initialiseDB,
+    getOrCreatePark,
+    getOrCreateMovie,
+    createRow,
+    saveRows
 ) where
+
+import Types
+import Control.Applicative
+import Database.SQLite.Simple
+import Database.SQLite.Simple.Internal
+import Database.SQLite.Simple.FromRow
+import Database.SQLite.Simple.ToRow
 
 initialiseDB :: IO Connection
 initialiseDB = do
