@@ -1,4 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
+
 
 module Types (
     Event (..),
@@ -42,7 +44,21 @@ data Row = Row {
     underwriter_ :: Maybe String,
     phone_ :: String,
     address_ :: String
-} deriving (Show, Generic)
+} deriving (Generic)
+
+instance Show Row where
+    show a = "----On " ++ (day_ a) ++ ", " ++ (date_ a) ++ ", " ++ (movie_ a) 
+        ++ " will be screened in " ++ (park_ a) ++ ", " ++ (address_ a) 
+        ++ ". The rating of the movie is " ++ (rating_ a) ++ ". " ++ (showUnderwriter a) ++ (showCC a) 
+        ++ " Please call " ++ (phone_ a) ++ " for more information."
+
+showCC :: Row -> String
+showCC a | cc_ a = "CC is provided." | otherwise = ""
+
+showUnderwriter :: Row -> String
+showUnderwriter a = case underwriter_ a of 
+    Nothing -> ""
+    Just writer -> "The underwriter is " ++ writer ++ "."
 
 data Rows = Rows {
     rows :: [Row]
