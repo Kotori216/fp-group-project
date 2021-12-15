@@ -1,6 +1,19 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Database (
     initialiseDB,
+    getOrCreatePark,
+    getOrCreateMovie,
+    createRow,
+    saveRows
 ) where
+
+import Types
+import Control.Applicative
+import Database.SQLite.Simple
+import Database.SQLite.Simple.Internal
+import Database.SQLite.Simple.FromRow
+import Database.SQLite.Simple.ToRow
 
 initialiseDB :: IO Connection
 initialiseDB = do
@@ -25,6 +38,27 @@ initialiseDB = do
             \PRIMARY KEY (`name`))"
         return conn
 
+instance FromRow Park where
+    fromRow = Park <$> field <*> field <*> field
+
+instance ToRow Park where
+    toRow (Park name phone address)
+        = toRow (name, phone, address)
+
+instance FromRow Movie where
+    fromRow = Movie <$> field <*> field <*> field <*> field
+
+instance ToRow Movie where
+    toRow (Movie title cc rating underwriter)
+        = toRow (title, cc, rating, underwriter)
+
+instance FromRow Event where
+    fromRow = Event <$> field <*> field <*> field <*> field <*> field
+
+instance ToRow Event where
+    toRow (Event id day date park movie)
+        = toRow (id, day, date, park, movie)
+
 getOrCreatePark :: Connection -> String -> String -> String -> IO Park
 getOrCreatePark conn name phone address = do
     results <- queryNamed conn "SELECT * FROM park WHERE name=:name" [":name" := name]    
@@ -48,7 +82,7 @@ createRow conn row = do
     park <- getOrCreatePark conn (name_ row) (phone_ row) (address_ row)
     movie <- getOrCreateMovie conn (title_ row) (cc_ row) (rating_ row) (underwriter_ row)
     let event = Event {
-        id = id_ row,
+        Types.id = id_ row,
         day = day_ row,
         date = date_ row,
         park = name park,
