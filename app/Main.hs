@@ -19,11 +19,34 @@ main = do
     print "Saving on DB..."
     saveRows conn rows_
     print "Saved!"
-    parkAllEvents <- queryParkAllEvents conn
-    mapM_ print parkAllEvents
-    movieAllEvents <- queryMovieAllEvents conn
-    mapM_ print movieAllEvents
-    parkMovieAllEvents <- queryParkMovieAllEvents conn
-    mapM_ print parkMovieAllEvents
-
-
+    print "The XML is now ready for query processing"
+    print "----------------------------------------------------"
+    print "  Welcome to the Movie info app                     "
+    print "  Plsease choose an query option below:             "
+    print "  (1) Query by entering the park name               "
+    print "  (2) Query by entering the movie name              "
+    print "  (3) Query by entering both the park & movie name  "
+    print "  (4) Quit                                          "
+    print "----------------------------------------------------"
+    option <- readLn :: IO Int
+    case option of
+        1 -> do
+            parkAllEvents <- queryParkAllEvents conn
+            case parkAllEvents of
+                Nothing -> print "Could't find events for the given park name"
+            mapM_ print parkAllEvents
+            main
+        2 -> do
+            movieAllEvents <- queryMovieAllEvents conn
+            case movieAllEvents of
+                Nothing -> print "Could't find events for the given movie name"
+            mapM_ print movieAllEvents
+            main
+        3 -> do
+            parkMovieAllEvents <- queryParkMovieAllEvents conn
+            case parkMovieAllEvents of
+                Nothing -> print "Could't find events for the given park & movie name"
+            mapM_ print parkMovieAllEvents
+            main
+        4 -> print "Hope you've enjoyed using the app!"
+        otherwise -> print "Invalid option"
