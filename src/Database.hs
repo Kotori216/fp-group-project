@@ -79,8 +79,8 @@ getOrCreateMovie conn title cc rating underwriter = do
 
 createRow :: Connection -> Row -> IO ()
 createRow conn row = do
-    park <- getOrCreatePark conn (name_ row) (phone_ row) (address_ row)
-    movie <- getOrCreateMovie conn (title_ row) (cc_ row) (rating_ row) (underwriter_ row)
+    park <- getOrCreatePark conn (park_ row) (phone_ row) (address_ row)
+    movie <- getOrCreateMovie conn (movie_ row) (cc_ row) (rating_ row) (underwriter_ row)
     let event = Event {
         Types.id = id_ row,
         day = day_ row,
