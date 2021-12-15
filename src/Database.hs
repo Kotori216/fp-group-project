@@ -38,6 +38,11 @@ initialiseDB = do
             \PRIMARY KEY (`name`))"
         return conn
 
+
+instance FromRow Row where
+    fromRow = Row <$> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field
+
+
 instance FromRow Park where
     fromRow = Park <$> field <*> field <*> field
 
@@ -92,3 +97,35 @@ createRow conn row = do
 
 saveRows :: Connection -> [Row] -> IO ()
 saveRows conn = mapM_ (createRow conn)
+
+queryParkAllEvents :: Connection -> IO [Row]
+queryParkAllEvents conn = do
+    putStr "Enter park name > "
+    parkName <- getLine
+    putStrLn $ "Looking for " ++ parkName ++ " events..."
+    let sql = "SELECT id, day, date, park, movie, cc, rating, underwriter, phone, address FROM event inner join park on event.park == park.name inner join movie on event.movie == movie.title WHERE event.park=?"
+    query conn sql [parkName]
+
+queryMovieAllEvents :: Connection -> IO [Row]
+queryMovieAllEvents conn = do
+    putStr "Enter movie name > "
+    movieName <- getLine
+    putStrLn $ "Looking for " ++ movieName ++ " events..."
+    let sql = "SELECT id, day, date, park, movie, cc, rating, underwriter, phone, address FROM event inner join park on event.park == park.name inner join movie on event.movie == movie.title WHERE event.movie=?"
+    query conn sql [movieName]
+
+queryParkMovieAllEvents :: Connection -> IO [Row]
+queryParkMovieAllEvents conn = do
+    putStr "Enter park name > "
+    parkName <- getLine
+    putStr "Enter movie name > "
+    movieName <- getLine
+    putStrLn $ "Looking for " ++ parkName ++ " and " ++ movieName ++ "events..."
+    let sql = "SELECT id, day, date, park, movie, cc, rating, underwriter, phone, address FROM event inner join park on event.park == park.name inner join movie on event.movie == movie.title WHERE event.park=? and event.movie=?"
+    query conn sql [parkName, movieName]
+
+-- queryCountryTotalCases :: Connection -> IO ()
+-- queryCountryTotalCases conn = do
+--     countryEntries <- queryCountryAllEntries conn
+--     let total = sum (map cases countryEntries)
+--     print $ "Total entries: " ++ show(total)
