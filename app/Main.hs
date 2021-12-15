@@ -2,6 +2,8 @@ module Main where
 
 import Fetch
 import Parse
+import Database
+import Types
 import Xeno.DOM
 import Data.ByteString 
 import qualified Data.ByteString.Lazy.Char8 as L8
@@ -12,6 +14,16 @@ main = do
     print "Downloading..."
     xml <- download url
     print "Parsing..."
-    let rows_ = parseRows xml
-    print rows_
+    let rows_ = rows $ parseRows xml
+    conn <- initialiseDB
+    print "Saving on DB..."
+    saveRows conn rows_
+    print "Saved!"
+    parkAllEvents <- queryParkAllEvents conn
+    mapM_ print parkAllEvents
+    movieAllEvents <- queryMovieAllEvents conn
+    mapM_ print movieAllEvents
+    parkMovieAllEvents <- queryParkMovieAllEvents conn
+    mapM_ print parkMovieAllEvents
+
 
