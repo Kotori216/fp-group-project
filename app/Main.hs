@@ -27,4 +27,6 @@ main = do
     print t
     print "=========first movie"
     print $ parseMovie node
+    print "=========id"
+    print $ snd $ Prelude.head $ attributes $ node
 

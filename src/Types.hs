@@ -37,11 +37,9 @@ data Row = Row {
     date_ :: String,
     park_ :: String,
     movie_ :: String,
-    title_ :: String,
     cc_ :: Bool,
     rating_ :: String,
     underwriter_ :: Maybe String,
-    name_ :: String,
     phone_ :: String,
     address_ :: String
 } deriving (Show, Generic)

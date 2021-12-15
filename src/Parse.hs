@@ -32,6 +32,31 @@ parseMovie node =
         Just mrating = getTextOfChildren (children node) "rating"
         munderwriter = getTextOfChildren (children node) "underwriter"
     in Movie {title = mtitle, cc = mcc, rating = mrating, underwriter = munderwriter}
+
+parseRow :: Node -> Row
+parseRow node =
+    let rid = bsToStr $ snd $ Prelude.head $ attributes $ node
+        Just rday = getTextOfChildren (children node) "day"
+        Just rdate = getTextOfChildren (children node) "date"
+        Just rpark = getTextOfChildren (children node) "park"
+        Just rphone = getTextOfChildren (children node) "park_phone"
+        Just rmovie = getTextOfChildren (children node) "title"
+        rcc = (getTextOfChildren (children node) "cc") == Just "Y" 
+        Just rrating = getTextOfChildren (children node) "rating"
+        runderwriter = getTextOfChildren (children node) "underwriter"
+        Just raddress = getTextOfChildren (children node) "park_address"
+    in Row {
+        id_ = rid,
+        day_ = rday,
+        date_ = rdate,
+        park_ = rpark,
+        movie_ = rmovie,
+        cc_ = rcc,
+        rating_ = rrating,
+        underwriter_ = runderwriter,
+        phone_ = rphone,
+        address_ = raddress
+    }
  
 
 xml2RowNodes :: L8.ByteString -> [Node]
