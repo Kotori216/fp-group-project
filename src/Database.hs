@@ -110,29 +110,29 @@ saveRows conn = mapM_ (createRow conn)
 -- | query all events that happens on the input park
 queryParkAllEvents :: Connection -> IO [Row]
 queryParkAllEvents conn = do
-    putStr "Enter park name > "
+    print "Enter park name > "
     parkName <- getLine
-    putStrLn $ "Looking for " ++ parkName ++ " events..."
+    print $ "Looking for " ++ parkName ++ " events..."
     let sql = "SELECT id, day, date, park, movie, cc, rating, underwriter, phone, address FROM event inner join park on event.park == park.name inner join movie on event.movie == movie.title WHERE event.park=?"
     query conn sql [parkName]
 
 -- | query all events of the input movie
 queryMovieAllEvents :: Connection -> IO [Row]
 queryMovieAllEvents conn = do
-    putStr "Enter movie name > "
+    print "Enter movie name > "
     movieName <- getLine
-    putStrLn $ "Looking for " ++ movieName ++ " events..."
+    print $ "Looking for " ++ movieName ++ " events..."
     let sql = "SELECT id, day, date, park, movie, cc, rating, underwriter, phone, address FROM event inner join park on event.park == park.name inner join movie on event.movie == movie.title WHERE event.movie=?"
     query conn sql [movieName]
 
 -- | query all events of the input movie and happens in the input park
 queryParkMovieAllEvents :: Connection -> IO [Row]
 queryParkMovieAllEvents conn = do
-    putStr "Enter park name > "
+    print "Enter park name > "
     parkName <- getLine
-    putStr "Enter movie name > "
+    print "Enter movie name > "
     movieName <- getLine
-    putStrLn $ "Looking for " ++ parkName ++ " and " ++ movieName ++ "events..."
+    print $ "Looking for " ++ parkName ++ " and " ++ movieName ++ " events..."
     let sql = "SELECT id, day, date, park, movie, cc, rating, underwriter, phone, address FROM event inner join park on event.park == park.name inner join movie on event.movie == movie.title WHERE event.park=? and event.movie=?"
     query conn sql [parkName, movieName]
 
