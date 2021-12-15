@@ -1,11 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
+-- {-# OPTIONS_HADDOCK show-extensions #-}
 
 module Database (
     initialiseDB,
     getOrCreatePark,
     getOrCreateMovie,
     createRow,
-    saveRows
+    saveRows,
+    queryParkAllEvents,
+    queryMovieAllEvents,
+    queryParkMovieAllEvents
 ) where
 
 import Types
@@ -15,6 +19,7 @@ import Database.SQLite.Simple.Internal
 import Database.SQLite.Simple.FromRow
 import Database.SQLite.Simple.ToRow
 
+-- | create tables
 initialiseDB :: IO Connection
 initialiseDB = do
         conn <- open "row.sqlite"
@@ -64,6 +69,7 @@ instance ToRow Event where
     toRow (Event id day date park movie)
         = toRow (id, day, date, park, movie)
 
+-- | if this park not in the table, insert it
 getOrCreatePark :: Connection -> String -> String -> String -> IO Park
 getOrCreatePark conn name phone address = do
     results <- queryNamed conn "SELECT * FROM park WHERE name=:name" [":name" := name]    
@@ -73,6 +79,7 @@ getOrCreatePark conn name phone address = do
         execute conn "INSERT INTO park (name, phone, address) VALUES (?, ?, ?)" (name, phone, address)
         getOrCreatePark conn name phone address
 
+-- | if this movie not in the table, insert it
 getOrCreateMovie :: Connection -> String -> Bool -> String -> Maybe String -> IO Movie
 getOrCreateMovie conn title cc rating underwriter = do
     results <- queryNamed conn "SELECT * FROM movie WHERE title=:title" [":title" := title]    
@@ -82,6 +89,7 @@ getOrCreateMovie conn title cc rating underwriter = do
         execute conn "INSERT INTO movie (title, cc, rating, underwriter) VALUES (?, ?, ?, ?)" (title, cc, rating, underwriter)
         getOrCreateMovie conn title cc rating underwriter
 
+-- | insert a row into the table.
 createRow :: Connection -> Row -> IO ()
 createRow conn row = do
     park <- getOrCreatePark conn (park_ row) (phone_ row) (address_ row)
@@ -95,9 +103,11 @@ createRow conn row = do
     }
     execute conn "INSERT INTO event VALUES (?,?,?,?,?)" event
 
+-- | insert rows into the table
 saveRows :: Connection -> [Row] -> IO ()
 saveRows conn = mapM_ (createRow conn)
 
+-- | query all events that happens on the input park
 queryParkAllEvents :: Connection -> IO [Row]
 queryParkAllEvents conn = do
     putStr "Enter park name > "
@@ -106,6 +116,7 @@ queryParkAllEvents conn = do
     let sql = "SELECT id, day, date, park, movie, cc, rating, underwriter, phone, address FROM event inner join park on event.park == park.name inner join movie on event.movie == movie.title WHERE event.park=?"
     query conn sql [parkName]
 
+-- | query all events of the input movie
 queryMovieAllEvents :: Connection -> IO [Row]
 queryMovieAllEvents conn = do
     putStr "Enter movie name > "
@@ -114,6 +125,7 @@ queryMovieAllEvents conn = do
     let sql = "SELECT id, day, date, park, movie, cc, rating, underwriter, phone, address FROM event inner join park on event.park == park.name inner join movie on event.movie == movie.title WHERE event.movie=?"
     query conn sql [movieName]
 
+-- | query all events of the input movie and happens in the input park
 queryParkMovieAllEvents :: Connection -> IO [Row]
 queryParkMovieAllEvents conn = do
     putStr "Enter park name > "
