@@ -2,7 +2,7 @@
 
 ## How to compile the application
 
-Run the conmmand `stack build` in the terminal.
+Run the command `stack build` in the terminal.
 
 ## How to execute the application
 
@@ -15,7 +15,7 @@ After executing, we will see the following information and start the interaction
 ```
 ----------------------------------------------------
   Welcome to the Movie info app
-  Plsease choose an query option below:
+  Please choose a query option below:
   (1) Download Data
   (2) Query by entering the park name
   (3) Query by entering the movie name
@@ -52,7 +52,7 @@ Looking for Coco events...
 Hope you've enjoyed using the app!
 ```
 
-Note: If the user enter an invalid name they want to search, the application will give some error information. For example, after entering a park name `kkk` that is not listed in the database, the application will print `Could't find events for the given park name`.
+Note: If the user enters an invalid name they want to search, the application will give some error information. For example, after entering a park name `kkk` that is not listed in the database, the application will print `Couldn't find events for the given park name`.
 
 ## Details of the web source we are using
 
