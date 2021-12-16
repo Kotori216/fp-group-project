@@ -12,7 +12,7 @@ main :: IO ()
 main = do
     Prelude.putStrLn "----------------------------------------------------"
     Prelude.putStrLn "  Welcome to the Movie info app                     "
-    Prelude.putStrLn "  Plsease choose a query option below:              "
+    Prelude.putStrLn "  Please choose a query option below:               "
     Prelude.putStrLn "  (1) Download Data                                 "    
     Prelude.putStrLn "  (2) Query by entering the park name               "
     Prelude.putStrLn "  (3) Query by entering the movie name              "
