@@ -10,43 +10,47 @@ import qualified Data.ByteString.Lazy.Char8 as L8
 
 main :: IO ()
 main = do
-    let url = "https://data.cityofchicago.org/api/views/7piw-z6r6/rows.xml"
-    putStrLn "Downloading..."
-    xml <- download url
-    putStrLn "Parsing..."
-    let rows_ = rows $ parseRows xml
+
+    Prelude.putStrLn "----------------------------------------------------"
+    Prelude.putStrLn "  Welcome to the Movie info app                     "
+    Prelude.putStrLn "  Plsease choose an query option below:             "
+    Prelude.putStrLn "  (1) Download Data                                 "    
+    Prelude.putStrLn "  (2) Query by entering the park name               "
+    Prelude.putStrLn "  (3) Query by entering the movie name              "
+    Prelude.putStrLn "  (4) Query by entering both the park & movie name  "
+    Prelude.putStrLn "  (5) Quit                                          "
+    Prelude.putStrLn "----------------------------------------------------"
     conn <- initialiseDB
-    putStrLn "Saving on DB..."
-    saveRows conn rows_
-    putStrLn "Saved!"
-    putStrLn "The XML is now ready for query processing"
-    putStrLn "----------------------------------------------------"
-    putStrLn "  Welcome to the Movie info app                     "
-    putStrLn "  Plsease choose an query option below:             "
-    putStrLn "  (1) Query by entering the park name               "
-    putStrLn "  (2) Query by entering the movie name              "
-    putStrLn "  (3) Query by entering both the park & movie name  "
-    putStrLn "  (4) Quit                                          "
-    putStrLn "----------------------------------------------------"
     option <- readLn :: IO Int
     case option of
         1 -> do
-            parkAllEvents <- queryParkAllEvents conn
-            case parkAllEvents of
-                [] -> putStrLn "Could't find events for the given park name"
-                otherwise -> mapM_ print parkAllEvents
+            let url = "https://data.cityofchicago.org/api/views/7piw-z6r6/rows.xml"
+            Prelude.putStrLn "Downloading..."
+            xml <- download url
+            Prelude.putStrLn "Parsing..."
+            let rows_ = rows $ parseRows xml
+            Prelude.putStrLn "Saving on DB..."
+            saveRows conn rows_
+            Prelude.putStrLn "Saved!"
+            Prelude.putStrLn "The XML is now ready for query processing" 
             main
         2 -> do
-            movieAllEvents <- queryMovieAllEvents conn
-            case movieAllEvents of
-                [] -> putStrLn "Could't find events for the given movie name"
-                otherwise -> mapM_ print movieAllEvents
+            parkAllEvents <- queryParkAllEvents conn
+            case parkAllEvents of
+                [] -> Prelude.putStrLn "Could't find events for the given park name"
+                otherwise -> mapM_ print parkAllEvents
             main
         3 -> do
+            movieAllEvents <- queryMovieAllEvents conn
+            case movieAllEvents of
+                [] -> Prelude.putStrLn "Could't find events for the given movie name"
+                otherwise -> mapM_ print movieAllEvents
+            main
+        4 -> do
             parkMovieAllEvents <- queryParkMovieAllEvents conn
             case parkMovieAllEvents of
-                [] -> putStrLn "Could't find events for the given park & movie name"
+                [] -> Prelude.putStrLn "Could't find events for the given park & movie name"
                 otherwise -> mapM_ print parkMovieAllEvents
             main
-        4 -> putStrLn "Hope you've enjoyed using the app!"
-        otherwise -> putStrLn "Invalid option"
+        5 -> Prelude.putStrLn "Hope you've enjoyed using the app!"
+        otherwise -> Prelude.putStrLn "Invalid option"
