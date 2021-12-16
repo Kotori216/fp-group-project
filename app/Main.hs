@@ -36,19 +36,19 @@ main = do
         2 -> do
             parkAllEvents <- queryParkAllEvents conn
             case parkAllEvents of
-                [] -> Prelude.putStrLn "Could't find events for the given park name"
+                [] -> Prelude.putStrLn "Couldn't find events for the given park name"
                 otherwise -> mapM_ print parkAllEvents
             main
         3 -> do
             movieAllEvents <- queryMovieAllEvents conn
             case movieAllEvents of
-                [] -> Prelude.putStrLn "Could't find events for the given movie name"
+                [] -> Prelude.putStrLn "Couldn't find events for the given movie name"
                 otherwise -> mapM_ print movieAllEvents
             main
         4 -> do
             parkMovieAllEvents <- queryParkMovieAllEvents conn
             case parkMovieAllEvents of
-                [] -> Prelude.putStrLn "Could't find events for the given park & movie name"
+                [] -> Prelude.putStrLn "Couldn't find events for the given park & movie name"
                 otherwise -> mapM_ print parkMovieAllEvents
             main
         5 -> Prelude.putStrLn "Hope you've enjoyed using the app!"
