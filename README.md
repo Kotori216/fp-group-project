@@ -2,13 +2,15 @@
 
 ## How to compile the application
 
-Run `stack build` command.
+Run the conmmand `stack build` in the terminal.
 
-## How to run the application
+## How to execute the application
 
-After compiling, run `stack exec haskell-project-exe` command.
+After compiling, run the command `stack exec haskell-project-exe` in the terminal.
 
-## How to use the application
+## How to use the application (main functionality)
+
+After executing, we will see the following information and start the interaction:
 
 ```
 ----------------------------------------------------
@@ -22,21 +24,35 @@ After compiling, run `stack exec haskell-project-exe` command.
 ----------------------------------------------------
 ```
 
-1. Type `1` in the consoles to fetch and download the XML data and save it to the database
+1. Type `1` in the consoles to download and parse the XML data, and save it to the database:
 
-2. After it prints `The XML is now ready for query processing`, type `2`, `3` or `4` to get the event information. For example, type `3` and `Coco`
+```
+Downloading...
+Parsing...
+Saving on DB...
+Saved!
+The XML is now ready for query processing
+```
 
-   ```
-   3
-   Enter movie name > 
-   Coco
-   Looking for Coco events...
-   ----On Tue, 2019-08-06T00:00:00, Coco will be screened in Lawler Park, 5210 W. 64th St.. The rating of the movie is PG. CC is provided. Please call (773) 284-7328 for more information.
-   ----On Tue, 2019-08-06T00:00:00, Coco will be screened in West Lawn Park, 4233 W. 65th St.. The rating of the movie is PG. CC is provided. Please call (773) 284-2803 for more information.
-   ...
-   ```
+2. After it prints `The XML is now ready for query processing`, the user will be required to type `2`, `3` or `4` they interested in to get the event information. For example, type `3` and `Coco`:
 
-3. Type `5` to quit
+```
+3
+Enter movie name > 
+Coco
+Looking for Coco events...
+----On Tue, 2019-08-06T00:00:00, Coco will be screened in Lawler Park, 5210 W. 64th St.. The rating of the movie is PG. CC is provided. Please call (773) 284-7328 for more information.
+----On Tue, 2019-08-06T00:00:00, Coco will be screened in West Lawn Park, 4233 W. 65th St.. The rating of the movie is PG. CC is provided. Please call (773) 284-2803 for more information.
+...
+```
+
+3. Type `5` to quit:
+
+```
+Hope you've enjoyed using the app!
+```
+
+Note: If the user enter an invalid name they want to search, the application will give some error information. For example, after entering a park name `kkk` that is not listed in the database, the application will print `Could't find events for the given park name`.
 
 ## Details of the web source we are using
 
@@ -71,6 +87,5 @@ The XML file looks like:
 ## Extra features
 
 - We have 3 tables (event, movie and park). The `movie` in the `event` table maps to the `title` in the `movie` table. The `park` in the `event` table maps to the `name` in the `park` table.
-- We use XML-type data, which is more complex to parse. The external library we use has little documentation and no example.  
+- We use XML-type data, which is more complex to parse. The external library we use has little documentation and no example.
 - We write an instance of Show of the data type we query, so that it's more user-friendly when printing the results.
-
