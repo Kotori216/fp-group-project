@@ -89,9 +89,12 @@ getOrCreateMovie conn title cc rating underwriter = do
         execute conn "INSERT INTO movie (title, cc, rating, underwriter) VALUES (?, ?, ?, ?)" (title, cc, rating, underwriter)
         getOrCreateMovie conn title cc rating underwriter
 
+
 -- | insert a row into the table.
-createRow :: Connection -> Row -> IO ()
+createRow :: Connection -> Row -> IO Event
 createRow conn row = do
+    let query_id = id_ row
+    results <- queryNamed conn "SELECT * FROM event WHERE id=:id" [":id" := query_id]
     park <- getOrCreatePark conn (park_ row) (phone_ row) (address_ row)
     movie <- getOrCreateMovie conn (movie_ row) (cc_ row) (rating_ row) (underwriter_ row)
     let event = Event {
@@ -101,7 +104,13 @@ createRow conn row = do
         park = name park,
         movie = title movie
     }
-    execute conn "INSERT INTO event VALUES (?,?,?,?,?)" event
+
+    if length results > 0 then
+        return . head $ results
+    else do
+        execute conn "INSERT INTO event VALUES (?,?,?,?,?)" event
+        createRow conn row
+
 
 -- | insert rows into the table
 saveRows :: Connection -> [Row] -> IO ()
